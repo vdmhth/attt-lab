@@ -1,9 +1,9 @@
 """
-python3 encrypt_file.py genkey  key.bin ->run this to generate a random 10-byte key
-python3 encrypt_file.py enc     key.bin  plain.txt   cipher.bin -> encrypts plain.txt to cipher.bin using key.bin and a fresh random IV
-python3 encrypt_file.py dec     key.bin  cipher.bin  plain_out.txt -> decrypts cipher.bin to plain_out.txt using key.bin
-python3 encrypt_file.py selftest -> round-trip + fresh-IV check
-python3 encrypt_file.py sameiv -> demo of the danger of reusing IVs"""
+python encrypt_file.py genkey  key.bin ->run this to generate a random 10-byte key
+python encrypt_file.py enc     key.bin  plain.txt   cipher.bin -> encrypts plain.txt to cipher.bin using key.bin and a fresh random IV
+python encrypt_file.py dec     key.bin  cipher.bin  plain_out.txt -> decrypts cipher.bin to plain_out.txt using key.bin
+python encrypt_file.py selftest -> round-trip + fresh-IV check
+python encrypt_file.py sameiv -> demo of the danger of reusing IVs"""
 import os
 import sys
 from trivium import keystream
