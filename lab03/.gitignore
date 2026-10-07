@@ -1,0 +1,6 @@
+*.bin
+plain.txt
+plain_out.txt
+msg1.txt
+msg2.txt
+__pycache__/
