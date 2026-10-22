@@ -13,11 +13,8 @@ def xor(a: bytes, b: bytes) -> bytes:
 def split_blocks(data: bytes) -> list[bytes]:
     return [data[i:i + BLOCK] for i in range(0, len(data), BLOCK)]
 
-def cfb_encrypt(key: bytes, plaintext: bytes, iv: bytes | None = None) -> bytes:
-    if iv is None:
-        iv = os.urandom(BLOCK)
-    if len(iv) != BLOCK:
-        raise ValueError(f"IV must be exactly {BLOCK} bytes")
+def cfb_encrypt(key: bytes, plaintext: bytes) -> bytes:
+    iv = os.urandom(BLOCK)
 
     prev = iv
     out = []
