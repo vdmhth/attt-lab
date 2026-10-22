@@ -1,0 +1,18 @@
+Question 1 (ECB): ECB is not safe.Really, I mean: ECB is not safe.
+  y0 = a1dc4d1fe237b8ea72bb49948cca4861
+  y2 = a1dc4d1fe237b8ea72bb49948cca4861
+  y0 == y2: True; equal plaintext blocks give equal ECB blocks.
+Question 2 (ECB): Tux is visible!
+Question 3 (ECB): Transfer $1.00 from Oscar at bank A to bank B.
+Question 4 (CBC): Basic CBC mode encryption needs padding.
+Question 5 (CBC): Our implementation uses rand. IV
+Question 6 (CBC): Never let a CBC IV be predictable to attackers.
+Question 7 (CBC): Hello, SoICT!
+Question 8 (OFB): OFB turns a block cipher into a synchronous stream cipher.
+Question 9 (OFB): The OFB keystream never depends on the message.
+Question 10 (CFB): In CFB mode each ciphertext block feeds the next block.
+Question 11 (CFB): CFB recovers from a corrupted block after one more block.
+Question 12 (CTR): CTR mode lets you build a stream cipher from a block cipher.
+Question 13 (CTR): Always avoid the two time pad!
+Question 14 (CTR): A counter is a full 128-bit integer, so every carry must propagate.
+Question 15 (CTR): Counters wrap around modulo 2^128.
