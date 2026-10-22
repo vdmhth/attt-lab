@@ -37,35 +37,3 @@ def ofb_decrypt(key: bytes, ciphertext: bytes) -> bytes:
         s = aes_enc_block(key, s)
         out.append(xor(y, s[:len(y)]))
     return b"".join(out)
-
-QUESTIONS = (
-    (
-        8,
-        "01a1babc3cbfc48932761127997cdc40",
-        """
-        423b1d6d0d11d3fab1236e2e03294345
-        eaa47185fedf20251c5c1e2bcb3ef400
-        35003d37cdd5cae757a2d59483437a27
-        9fa215ee7d0045596bd0474c981c76fd
-        47c946be17c4e91238ff
-        """,
-    ),
-    (
-        9,
-        "01a1babc3cbfc48932761127997cdc40",
-        """
-        bbc9645adb9a7020010481aa0bfcde49
-        1a4ff192b902dc63f5b44ce05cce36ff
-        dbe35a2b779e46ca10bd773abfea383a
-        b89afb7d9b5667dbc6be72adc15558
-        """,
-    ),
-)
-
-def main() -> None:
-    for number, key_hex, ciphertext_hex in QUESTIONS:
-        plaintext = ofb_decrypt(bytes.fromhex(key_hex), bytes.fromhex(ciphertext_hex))
-        print(f"Question {number}: {plaintext.decode('utf-8')}")
-
-if __name__ == "__main__":
-    main()
