@@ -1,9 +1,5 @@
 # Lab 04: Modes of Operation
 
-Manual implementation of AES encryption and decryption in ECB, CBC, OFB,
-CFB (128-bit feedback), and CTR modes. The program prints the plaintexts
-for Questions 1–15 from the lab handout.
-
 ## Requirements
 
 - Python 3.10 or newer
@@ -49,11 +45,6 @@ Each non-comment line in `lab04_questions.txt` contains four whitespace-separate
 number mode key_hex ciphertext_hex
 ```
 
-Keys and ciphertexts are hex encoded. Ciphertext lines from the PDF have
-already been concatenated. For CBC, OFB, CFB, and CTR, the first 16 bytes of
-the decoded ciphertext are the IV. ECB has no IV. Reading the PDF is not
-required at runtime.
-
 ## Implementation
 
 - `ecb.py`: manual ECB and `10…0` padding (`0x80` followed by zero bytes).
@@ -61,29 +52,6 @@ required at runtime.
   (PKCS#7 for AES's 16-byte blocks).
 - `ofb.py`, `cfb.py`, `ctr.py`: manual feedback/counter processing without padding.
 - `solve.py`: input loading, mode selection, and plaintext output.
-- `test_aes_modes.py`: correctness tests.
 
-All five modes and both padding schemes are implemented by hand. Libraries
-are used only for single-block AES in the implementation. The ECB API inside
-the block helpers processes exactly one 16-byte block per call. Built-in
-message modes are used only in the tests as independent reference results.
 
-ECB/CBC always add padding, including a full padding block when the plaintext
-is already block aligned, and reject invalid padding during decryption.
-Non-ECB encryption generates a random 16-byte IV by default and prepends it
-to the ciphertext. CTR uses a 128-bit big-endian counter modulo 2^128.
 
-## Run tests
-
-```powershell
-python -m unittest -v
-```
-
-Tests cover all 15 answers, encryption/decryption, padding validation,
-partial blocks, IV handling, and counter carry/wraparound.
-
-## Submission
-
-Include the five mode modules, `solve.py`, `lab04_questions.txt`,
-`requirements.txt`, and this README in `GroupXX_Lab04.zip`, where `XX` is the
-group number. The tests and saved output may also be included.
