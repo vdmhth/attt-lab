@@ -17,11 +17,8 @@ def split_blocks(data: bytes) -> list[bytes]:
 def _int_to_block(n: int) -> bytes:
     return (n % (1 << 128)).to_bytes(BLOCK, "big")
 
-def ctr_encrypt(key: bytes, plaintext: bytes, iv: bytes | None = None) -> bytes:
-    if iv is None:
-        iv = os.urandom(BLOCK)
-    if len(iv) != BLOCK:
-        raise ValueError(f"Initial counter must be exactly {BLOCK} bytes")
+def ctr_encrypt(key: bytes, plaintext: bytes) -> bytes:
+    iv = os.urandom(BLOCK)
 
     counter = int.from_bytes(iv, "big")
     out = []
