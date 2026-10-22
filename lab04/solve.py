@@ -1,4 +1,4 @@
-"""Print the plaintexts for Questions 1-15 from the lab handout."""
+"""Decrypt Questions 1-15."""
 
 import argparse
 from pathlib import Path

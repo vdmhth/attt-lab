@@ -1,4 +1,4 @@
-"""Manual CBC encryption/decryption with padding for Lab 04."""
+"""AES-CBC."""
 
 import secrets
 
@@ -8,11 +8,7 @@ BLOCK_SIZE = 16
 
 
 def _aes_block(key: bytes, block: bytes, *, decrypt: bool = False) -> bytes:
-    """Library boundary: transform exactly ONE AES block, without padding.
-
-    cryptography exposes raw AES through an ECB context. No message or mode
-    processing is delegated here: ECB iteration and CBC chaining are below.
-    """
+    """Transform one AES block."""
     if len(key) not in (16, 24, 32):
         raise ValueError("AES key must contain 16, 24, or 32 bytes")
     if len(block) != BLOCK_SIZE:
@@ -23,7 +19,7 @@ def _aes_block(key: bytes, block: bytes, *, decrypt: bool = False) -> bytes:
 
 
 def pad_pkcs5(data: bytes) -> bytes:
-    """PKCS5 in the handout: PKCS#7 for AES's 16-byte blocks."""
+    """Add PKCS#7 padding."""
     missing = BLOCK_SIZE - len(data) % BLOCK_SIZE
     return data + bytes([missing]) * missing
 
@@ -44,7 +40,7 @@ def _xor_block(left: bytes, right: bytes) -> bytes:
 
 
 def cbc_encrypt(key: bytes, plaintext: bytes) -> bytes:
-    """Return IV || ciphertext, with a fresh random 16-byte IV on each call."""
+    """Encrypt; prepend a random IV."""
     iv = secrets.token_bytes(BLOCK_SIZE)
     previous = iv
     result = bytearray(iv)
@@ -57,7 +53,7 @@ def cbc_encrypt(key: bytes, plaintext: bytes) -> bytes:
 
 
 def cbc_decrypt(key: bytes, ciphertext: bytes) -> bytes:
-    """Read the leading IV, undo CBC chaining, then validate padding."""
+    """Decrypt and validate padding."""
     if len(ciphertext) < 2 * BLOCK_SIZE or len(ciphertext) % BLOCK_SIZE:
         raise ValueError("CBC ciphertext must contain a 16-byte IV and complete blocks")
     previous = ciphertext[:BLOCK_SIZE]
@@ -67,14 +63,3 @@ def cbc_decrypt(key: bytes, ciphertext: bytes) -> bytes:
         padded.extend(_xor_block(_aes_block(key, block, decrypt=True), previous))
         previous = block
     return unpad_pkcs5(bytes(padded))
-
-
-def main() -> None:
-    from pathlib import Path
-    from solve import solve_questions
-
-    solve_questions(Path(__file__).with_name("lab04_questions.txt"), "CBC")
-
-
-if __name__ == "__main__":
-    main()

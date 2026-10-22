@@ -1,16 +1,10 @@
-"""Manual ECB encryption/decryption with padding for Lab 04."""
-
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 
 BLOCK_SIZE = 16
 
 
 def _aes_block(key: bytes, block: bytes, *, decrypt: bool = False) -> bytes:
-    """Library boundary: transform exactly ONE AES block, without padding.
 
-    cryptography exposes raw AES through an ECB context. No message or mode
-    processing is delegated here: ECB iteration and CBC chaining are below.
-    """
     if len(key) not in (16, 24, 32):
         raise ValueError("AES key must contain 16, 24, or 32 bytes")
     if len(block) != BLOCK_SIZE:
@@ -21,7 +15,6 @@ def _aes_block(key: bytes, block: bytes, *, decrypt: bool = False) -> bytes:
 
 
 def pad_10star(data: bytes) -> bytes:
-    """Always append 0x80 followed by zero bytes up to a block boundary."""
     missing = BLOCK_SIZE - len(data) % BLOCK_SIZE
     return data + b"\x80" + b"\x00" * (missing - 1)
 
@@ -54,14 +47,3 @@ def ecb_decrypt(key: bytes, ciphertext: bytes) -> bytes:
         for i in range(0, len(ciphertext), BLOCK_SIZE)
     )
     return unpad_10star(padded)
-
-
-def main() -> None:
-    from pathlib import Path
-    from solve import solve_questions
-
-    solve_questions(Path(__file__).with_name("lab04_questions.txt"), "ECB")
-
-
-if __name__ == "__main__":
-    main()

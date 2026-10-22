@@ -28,8 +28,8 @@ python solve.py --mode CFB
 python solve.py --mode CTR
 ```
 
-Each mode can also be run directly: `python ecb.py`, `python cbc.py`,
-`python ofb.py`, `python cfb.py`, or `python ctr.py`.
+`solve.py` is the only entry point. The five mode modules contain only
+algorithm functions; all question data is stored in `lab04_questions.txt`.
 
 To use another question file with the same format:
 
