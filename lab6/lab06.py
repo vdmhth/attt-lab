@@ -178,9 +178,13 @@ if __name__ == "__main__":
         print("failed:",[hex(x) for x in failed])
 
     print("\nP1")
+    rows=[]
     for a,b in [(240,46),(1071,462),(99,78),(17,3120)]:
         print("\n",a,b)
         print(extended_table(a,b).to_string(index=False))
+        rows.append([a,b]+list(extended_euclid(a,b)))
+    print()
+    print(pd.DataFrame(rows, columns=["a", "b", "d", "x", "y"]).to_string(index=False))
 
     print("\nP2")
     rows=[]
