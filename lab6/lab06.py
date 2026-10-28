@@ -178,18 +178,29 @@ if __name__ == "__main__":
         print("failed:",[hex(x) for x in failed])
 
     print("\nP1")
+    rows=[]
     for a,b in [(240,46),(1071,462),(99,78),(17,3120)]:
         print("\n",a,b)
         print(extended_table(a,b).to_string(index=False))
+        rows.append([a,b]+list(extended_euclid(a,b)))
+    print()
+    print(pd.DataFrame(rows,columns=["a","b","d","x","y"]).to_string(index=False))
 
     print("\nP2")
     rows=[]
-    for a,n in [(7,40),(17,3120),(6,9),(65537,2**64),(2**64+13,2**127-1)]:
+    cases=[
+        (7,40,"7","40"),
+        (17,3120,"17","3120"),
+        (6,9,"6","9"),
+        (65537,2**64,"65537","2^64"),
+        (2**64+13,2**127-1,"2^64 + 13","2^127 - 1")
+    ]
+    for a,n,a_label,n_label in cases:
         try:
             inv=mod_inv(a,n)
         except ValueError:
             inv="none"
-        rows.append([a,n,inv])
+        rows.append([a_label,n_label,inv])
     print(pd.DataFrame(rows,columns=["a","n","a^-1 mod n"]).to_string(index=False))
 
     print("\nP3")
@@ -218,7 +229,8 @@ if __name__ == "__main__":
             inv=hex(poly_inv(a,p))
         except ValueError:
             inv="none"
-        rows.append([hex(p),hex(a),inv])
+        p_label="x^128 + x^7 + x^2 + x + 1" if p==((1<<128)|0x87) else hex(p)
+        rows.append([p_label,hex(a),inv])
     print(pd.DataFrame(rows,columns=["P","a","a^-1 mod P"]).to_string(index=False))
 
     print("\nP6")
