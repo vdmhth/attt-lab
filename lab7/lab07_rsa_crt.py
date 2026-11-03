@@ -109,7 +109,8 @@ if __name__ == "__main__":
     keys = load_keys()
     #Task 2
     test_toy(keys)
-    #các task còn lại =))
+    #Task 3
     test_given(keys)
     test_all(keys)
+    #Task 4
     benchmark(keys)
