@@ -1,11 +1,12 @@
 """IT4010E - Lab 07: RSA Decryption with the CRT"""
 import json
 import time
+from pathlib import Path
 
-DATA_FILE = "lab07_testdata.json"
+DATA_FILE = Path(__file__).with_name("lab07_testdata.json")
 
 
-def load_keys(path: str = DATA_FILE) -> dict:
+def load_keys(path: str | Path = DATA_FILE) -> dict:
     with open(path) as f:
         return {k["name"]: k for k in json.load(f)["keys"]}
 
@@ -99,10 +100,42 @@ def test_all(keys: dict) -> None:
 
 
 # ---------- Task 4 ----------
-def benchmark(keys: dict, repeat: int = 10) -> None:
-    # TODO: average time of rsa_decrypt and rsa_decrypt_crt
-    #       on rsa-1024, rsa-2048 and rsa-4096
-    pass
+def benchmark(keys: dict, repeat: int = 10) -> list[dict]:
+    results = []
+    for name in ("rsa-1024", "rsa-2048", "rsa-4096"):
+        k = keys[name]
+        vectors = k["vectors"]
+        total_ops = len(vectors) * repeat
+
+        start = time.perf_counter()
+        for _ in range(repeat):
+            for v in vectors:
+                rsa_decrypt(v["y"], k["d"], k["n"])
+        standard_ms = (time.perf_counter() - start) * 1000.0 / total_ops
+
+        pre = crt_precompute(k["d"], k["p"], k["q"])
+        start = time.perf_counter()
+        for _ in range(repeat):
+            for v in vectors:
+                rsa_decrypt_crt(v["y"], k["d"], k["p"], k["q"], pre)
+        crt_ms = (time.perf_counter() - start) * 1000.0 / total_ops
+
+        speedup = standard_ms / crt_ms if crt_ms else float("inf")
+        result = {
+            "key": name,
+            "bits": k["bits"],
+            "standard_ms": standard_ms,
+            "crt_ms": crt_ms,
+            "speedup": speedup,
+        }
+        results.append(result)
+
+    print("\nTask 4: execution time comparison")
+    print(f"{'Key size':>8} {'Standard (ms)':>16} {'CRT (ms)':>12} {'Speed-up':>10}")
+    
+    for r in results:
+        print(f"{r['bits']:>8} {r['standard_ms']:>15.3f} {r['crt_ms']:>12.3f} {r['speedup']:>9.2f}x")
+    return results
 
 
 if __name__ == "__main__":
